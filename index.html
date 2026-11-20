@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Payvue – smart money app</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F1;--card:#fff;--ink:#0E1B2C;--mut:#5d6b7c;--line:#e1e6dd;--brand:#0E1B2C;--on:#fff;--acc:#F5B700;--ok:#12805C;--bad:#C93A3F;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A121D;--card:#132033;--ink:#EEF2F6;--mut:#9aa9bb;--line:#22344c;--brand:#1B3150;--ok:#3DD6A3;--bad:#FF7A7F;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A121D;--card:#132033;--ink:#EEF2F6;--mut:#9aa9bb;--line:#22344c;--brand:#1B3150;--ok:#3DD6A3;--bad:#FF7A7F;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Bricolage Grotesque",system-ui,sans-serif}
+#app{max-width:480px;margin:0 auto;padding:16px 16px 90px}
+h1,h2,h3{margin:0;font-weight:800}
+.hero{background:var(--brand);color:var(--on);border-radius:22px;padding:20px}
+.hero small{opacity:.75}.bal{font-size:40px;font-weight:800;letter-spacing:-1px;margin:4px 0 12px}
+.acct{font-size:13px;opacity:.8}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 4px;text-align:center;font:inherit;color:var(--ink);cursor:pointer;font-size:13px}
+.tile b{display:block;font-size:22px}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.btn{background:var(--acc);color:#0E1B2C;border:0;border-radius:12px;padding:12px 16px;font-weight:800}
+.btn.ghost{background:transparent;color:inherit;border:1px solid currentColor}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
+.ai{display:flex;gap:8px;margin:14px 0 4px}
+.ai input{flex:1}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;margin:4px 0 10px}
+.ai input{margin:0}
+.msg{background:var(--card);border-left:4px solid var(--acc);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:15px}
+.tx{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.tx:last-child{border:0}.neg{color:var(--bad)}.pos{color:var(--ok)}
+.mut{color:var(--mut);font-size:13px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav div{max-width:480px;width:100%;display:flex}
+nav button{flex:1;background:none;border:0;padding:12px 0;color:var(--mut);font-weight:600}
+nav button[aria-current=true]{color:var(--ink);box-shadow:inset 0 3px var(--acc)}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}
+.chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--line)}
+.vcard{background:linear-gradient(135deg,#0E1B2C,#2c4a73);color:#fff;border-radius:18px;padding:18px;min-height:150px}
+.vcard.off{filter:grayscale(1);opacity:.6}
+.sw{display:flex;justify-content:space-between;align-items:center}
+@media(prefers-reduced-motion:no-preference){.msg{animation:in .25s}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+</style></head><body>
+<div id="app"></div>
+<nav><div id="nav"></div></nav>
+<script>
+const N=n=>"₦"+Math.round(n).toLocaleString("en-NG");
+let S={bal:150000,tab:"home",frozen:false,usd:0,goal:{name:"New laptop",target:400000,saved:85000},loan:null,
+tx:[{t:"Salary – Acme Ltd",a:250000,d:"Today"},{t:"MTN data",a:-3000,d:"Yesterday"},{t:"Transfer to Tunde",a:-5000,d:"Mon"}],
+chat:[{m:"Hi, I’m Vue. Try: “send 5000 to Ada”, “buy 1000 airtime”, or “how much did I spend?”"}],
+contacts:["Tunde","Ada","Chioma","Ibrahim"],last:null};
+try{const x=JSON.parse(localStorage.getItem("pv")||"null");if(x)S=x}catch(e){}
+const save=()=>{try{localStorage.setItem("pv",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+const risk=(amt,who)=>{let r=5;if(amt>S.bal*.5)r+=35;if(amt>=100000)r+=25;if(who&&!S.contacts.map(c=>c.toLowerCase()).includes(who.toLowerCase()))r+=30;const h=new Date().getHours();if(h<5)r+=15;return Math.min(r,98)};
+function pay(title,amt,who){
+ if(amt<=0||isNaN(amt))return"Enter an amount above ₦0.";
+ if(amt>S.bal)return"Insufficient balance. You have "+N(S.bal)+".";
+ const r=risk(amt,who);
+ if(r>=60)return"Blocked: fraud score "+r+"/100. "+(who?who+" is a new payee. ":"")+"Add them as a contact or verify with face ID to continue.";
+ S.bal-=amt;S.tx.unshift({t:title,a:-amt,d:"Just now"});save();
+ return"Done. "+title+" for "+N(amt)+" (fraud score "+r+"/100, low risk).";}
+function ask(q){
+ q=q.trim();if(!q)return;S.chat.push({u:q});let a;const l=q.toLowerCase();const n=parseFloat((l.replace(/,/g,"").match(/\d+(\.\d+)?/)||[])[0]);
+ const w=l.match(/to ([a-z]+)/);
+ if(/send|transfer/.test(l)&&w){a=pay("Transfer to "+w[1][0].toUpperCase()+w[1].slice(1),n,w[1])}
+ else if(/airtime/.test(l))a=pay("Airtime",n);
+ else if(/data/.test(l))a=pay("Data bundle",n||2000);
+ else if(/spen|spent/.test(l)){const s=S.tx.filter(t=>t.a<0).reduce((x,t)=>x-t.a,0);a="You’ve spent "+N(s)+" recently. Airtime, data and transfers lead. A weekly cap of "+N(s*.8)+" would save about "+N(s*.2)+"."}
+ else if(/balance/.test(l))a="Your balance is "+N(S.bal)+".";
+ else if(/save/.test(l)&&n){const m=Math.min(n,S.bal);S.bal-=m;S.goal.saved+=m;S.tx.unshift({t:"Saved to "+S.goal.name,a:-m,d:"Just now"});a="Moved "+N(m)+" to “"+S.goal.name+"”.";save()}
+ else a="I can send money, buy airtime or data, move money to savings, and summarise spending. Try “send 5000 to Ada”.";
+ S.chat.push({m:a});save();render()}
+const tabs={home:"Home",pay:"Pay",save:"Save",cards:"Cards",loans:"Loans"};
+function render(){
+ $("#nav").innerHTML=Object.entries(tabs).map(([k,v])=>`<button data-t="${k}" ${S.tab==k?'aria-current="true"':''}>${v}</button>`).join("");
+ $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;render();scrollTo(0,0)});
+ const v=views[S.tab]();$("#app").innerHTML=v;bind();}
+const hero=()=>`<div class="hero"><small>Available balance</small><div class="bal">${N(S.bal)}</div><div class="acct">Account 0123456789 · Payvue MFB</div></div>`;
+const txs=()=>S.tx.slice(0,6).map(t=>`<div class="tx"><span>${t.t}<br><span class="mut">${t.d}</span></span><b class="${t.a<0?"neg":"pos"}">${t.a<0?"−":"+"}${N(Math.abs(t.a))}</b></div>`).join("");
+const views={
+home:()=>hero()+`<div class="grid">${[["⇄","Send","pay"],["☎","Airtime","pay"],["▣","Cards","cards"],["◔","Save","save"]].map(x=>`<button class="tile" data-go="${x[2]}"><b>${x[0]}</b>${x[1]}</button>`).join("")}</div>
+<h3>Ask Vue</h3><div id="chat">${S.chat.slice(-4).map(c=>c.u?`<div class="mut" style="text-align:right">${c.u.replace(/</g,"&lt;")}</div>`:`<div class="msg">${c.m}</div>`).join("")}</div>
+<div class="ai"><input id="q" placeholder="Send ₦5,000 to Tunde" aria-label="Ask Vue"><button class="btn" id="go">Ask</button></div>
+<div class="card"><h3>Recent activity</h3>${txs()}</div>`,
+pay:()=>`<h2>Pay</h2><div class="card"><h3>Send money</h3><label>Recipient<select id="who">${S.contacts.map(c=>`<option>${c}</option>`).join("")}<option value="new">New payee (unverified)</option></select></label><label>Amount (₦)<input id="amt" type="number" inputmode="numeric" min="1"></label><button class="btn" id="send">Send money</button><p class="mut" id="out" role="status"></p></div>
+<div class="card"><h3>Airtime, data and bills</h3><label>Service<select id="svc"><option>Airtime</option><option>Data bundle</option><option>Electricity</option><option>Cable TV</option></select></label><label>Amount (₦)<input id="bamt" type="number" inputmode="numeric" min="1"></label><button class="btn" id="bill">Pay now</button><p class="mut" id="out2" role="status"></p></div>
+<div class="card"><h3>Offline payment</h3><p class="mut">No network? Dial <b>*347*7#</b> to pay through USSD, or tap phones to pay with NFC.</p></div>`,
+save:()=>{const g=S.goal,p=Math.min(100,g.saved/g.target*100);return`<h2>Save</h2><div class="card"><div class="sw"><h3>${g.name}</h3><span class="chip">Locked until target</span></div><p>${N(g.saved)} of ${N(g.target)}</p><div class="bar"><i style="width:${p}%"></i></div><p class="mut">Round-ups add the change from every payment. Interest 12% a year.</p><label>Add to goal (₦)<input id="samt" type="number" inputmode="numeric" min="1"></label><button class="btn" id="sv">Save now</button><p class="mut" id="out" role="status"></p></div><div class="card"><h3>Group wallet</h3><p class="mut">Split bills and pool money with friends. Coming in the next build.</p></div>`},
+cards:()=>`<h2>Cards</h2><div class="vcard ${S.frozen?"off":""}"><div class="sw"><b>Payvue</b><span>${S.frozen?"Frozen":"Active"}</span></div><p style="font-size:20px;letter-spacing:2px;margin:30px 0 4px">•••• •••• •••• 4417</p><span>Naira virtual card</span></div>
+<div class="card sw"><div><h3>Freeze card</h3><span class="mut">Blocks all spending instantly</span></div><button class="btn ${S.frozen?"":"ghost"}" id="frz" aria-pressed="${S.frozen}">${S.frozen?"Unfreeze":"Freeze"}</button></div>
+<div class="card"><h3>USD wallet</h3><p>$${S.usd.toFixed(2)}</p><button class="btn" id="usd">Convert ₦50,000 to USD</button><p class="mut" id="out" role="status">Rate: ₦1,500 per $1 (sample rate).</p></div>`,
+loans:()=>{const sc=Math.min(850,500+S.tx.length*18+Math.floor(S.bal/5000));const lim=Math.round(sc*300/1000)*1000;return`<h2>Loans</h2><div class="card"><h3>Your credit score: ${sc}</h3><p class="mut">Built from wallet activity and bill payments. No paperwork.</p><p>You can borrow up to <b>${N(lim)}</b></p>${S.loan?`<p class="pos">Active loan: ${N(S.loan)} due in 30 days.</p>`:`<button class="btn" id="ln" data-lim="${lim}">Get ${N(lim)} now</button>`}<p class="mut" id="out" role="status">5% flat fee. Repay in 30 days.</p></div>
+<div class="card"><h3>Business tools</h3><p class="mut">Payment links, invoices and auto-bookkeeping for small businesses. Coming in the next build.</p></div>`}};
+function bind(){
+ document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.go;render()});
+ const on=(i,f)=>{const e=$(i);if(e)e.onclick=f};
+ on("#go",()=>ask($("#q").value));const q=$("#q");if(q)q.onkeydown=e=>{if(e.key=="Enter")ask(q.value)};
+ on("#send",()=>{const s=$("#who");const nw=s.value=="new";$("#out").textContent=pay("Transfer to "+(nw?"new payee":s.value),+$("#amt").value,nw?"stranger":s.value);render2()});
+ on("#bill",()=>{$("#out2").textContent=pay($("#svc").value,+$("#bamt").value);render2()});
+ on("#sv",()=>{const a=+$("#samt").value;if(a>0&&a<=S.bal){S.bal-=a;S.goal.saved+=a;S.tx.unshift({t:"Saved to "+S.goal.name,a:-a,d:"Just now"});save();render()}else $("#out").textContent="Enter an amount up to "+N(S.bal)+"."});
+ on("#frz",()=>{S.frozen=!S.frozen;save();render()});
+ on("#usd",()=>{if(S.bal>=50000){S.bal-=50000;S.usd+=50000/1500;S.tx.unshift({t:"Converted to USD",a:-50000,d:"Just now"});save();render()}else $("#out").textContent="Not enough balance."});
+ on("#ln",e=>{const l=+e.target.dataset.lim;S.loan=l*1.05;S.bal+=l;S.tx.unshift({t:"Loan disbursed",a:l,d:"Just now"});save();render()});
+}
+function render2(){const o=$("#out")?.textContent,o2=$("#out2")?.textContent;const a=document.activeElement.id;render();if(o&&$("#out"))$("#out").textContent=o;if(o2&&$("#out2"))$("#out2").textContent=o2}
+render();
+</script></body></html>
