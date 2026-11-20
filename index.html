@@ -2,108 +2,197 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Payvue – smart money app</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4F6F1;--card:#fff;--ink:#0E1B2C;--mut:#5d6b7c;--line:#e1e6dd;--brand:#0E1B2C;--on:#fff;--acc:#F5B700;--ok:#12805C;--bad:#C93A3F;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A121D;--card:#132033;--ink:#EEF2F6;--mut:#9aa9bb;--line:#22344c;--brand:#1B3150;--ok:#3DD6A3;--bad:#FF7A7F;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0A121D;--card:#132033;--ink:#EEF2F6;--mut:#9aa9bb;--line:#22344c;--brand:#1B3150;--ok:#3DD6A3;--bad:#FF7A7F;color-scheme:dark}
-*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Bricolage Grotesque",system-ui,sans-serif}
-#app{max-width:480px;margin:0 auto;padding:16px 16px 90px}
+:root{--bg:#F4F6F1;--card:#fff;--ink:#0E1B2C;--mut:#5d6b7c;--line:#e1e6dd;--brand:#0E1B2C;--on:#fff;--acc:#F5B700;--ok:#12805C;--bad:#C93A3F;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#0A121D;--card:#132033;--ink:#EEF2F6;--mut:#9aa9bb;--line:#22344c;--brand:#1B3150;--ok:#3DD6A3;--bad:#FF7A7F;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{max-width:480px;margin:0 auto;padding:16px}
 h1,h2,h3{margin:0;font-weight:800}
-.hero{background:var(--brand);color:var(--on);border-radius:22px;padding:20px}
-.hero small{opacity:.75}.bal{font-size:40px;font-weight:800;letter-spacing:-1px;margin:4px 0 12px}
-.acct{font-size:13px;opacity:.8}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 4px;text-align:center;font:inherit;color:var(--ink);cursor:pointer;font-size:13px}
-.tile b{display:block;font-size:22px}
-button{font:inherit;cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-.btn{background:var(--acc);color:#0E1B2C;border:0;border-radius:12px;padding:12px 16px;font-weight:800}
-.btn.ghost{background:transparent;color:inherit;border:1px solid currentColor}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
-.ai{display:flex;gap:8px;margin:14px 0 4px}
-.ai input{flex:1}
-input,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;margin:4px 0 10px}
-.ai input{margin:0}
-.msg{background:var(--card);border-left:4px solid var(--acc);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:15px}
-.tx{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
-.tx:last-child{border:0}.neg{color:var(--bad)}.pos{color:var(--ok)}
-.mut{color:var(--mut);font-size:13px}
-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
-nav div{max-width:480px;width:100%;display:flex}
-nav button{flex:1;background:none;border:0;padding:12px 0;color:var(--mut);font-weight:600}
-nav button[aria-current=true]{color:var(--ink);box-shadow:inset 0 3px var(--acc)}
-.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}
-.chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--line)}
-.vcard{background:linear-gradient(135deg,#0E1B2C,#2c4a73);color:#fff;border-radius:18px;padding:18px;min-height:150px}
-.vcard.off{filter:grayscale(1);opacity:.6}
-.sw{display:flex;justify-content:space-between;align-items:center}
-@media(prefers-reduced-motion:no-preference){.msg{animation:in .25s}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+.hero{background:var(--brand);color:var(--on);border-radius:22px;padding:20px;margin:12px 0}
+.hero small{opacity:.75}.bal{font-size:38px;font-weight:800;letter-spacing:-1px;margin:4px 0 8px}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+label{display:block;font-size:14px;color:var(--mut);margin-top:10px}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;margin-top:4px}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.btn{background:var(--acc);color:#0E1B2C;border:0;border-radius:12px;padding:12px 16px;font-weight:800;width:100%;margin-top:14px}
+.btn:disabled{opacity:.6}
+.link{background:none;border:0;color:inherit;text-decoration:underline;padding:4px}
+.small{width:auto;margin:0;padding:8px 12px;font-size:14px}
+.tabs{display:flex;gap:8px;margin:14px 0 4px}
+.tabs button{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700}
+.tabs button[aria-selected=true]{background:var(--brand);color:var(--on)}
+.msg{margin:12px 0 0;padding:10px 12px;border-radius:12px;font-size:15px;background:var(--bg);border-left:4px solid var(--acc)}
+.msg.err{border-color:var(--bad)}.msg.ok{border-color:var(--ok)}
+.msg ul{margin:6px 0 0 18px;padding:0}
+.tx{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.tx:last-child{border:0}.neg{color:var(--bad)}.pos{color:var(--ok)}.mut{color:var(--mut);font-size:13px}
+#banner{background:var(--acc);color:#0E1B2C;text-align:center;padding:8px 12px;font-size:14px;font-weight:600}
+[hidden]{display:none!important}
 </style></head><body>
-<div id="app"></div>
-<nav><div id="nav"></div></nav>
+<div id="banner" role="status" hidden>Waking the server. The first load can take up to a minute.</div>
+<main>
+<section id="auth">
+  <h1>Payvue</h1><p class="mut">Send, save and pay, all in one place.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tabUp" aria-selected="true">Sign up</button>
+    <button role="tab" id="tabIn" aria-selected="false">Log in</button>
+  </div>
+  <div class="card">
+    <div id="nameRow"><label for="name">Full name</label><input id="name" autocomplete="name"></div>
+    <label for="phone">Phone number</label><input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="08012345678">
+    <label for="pin">PIN (4 to 6 digits)</label><input id="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="6">
+    <button class="btn" id="authBtn">Create account</button>
+    <div id="authMsg" class="msg" role="status" hidden></div>
+  </div>
+</section>
+
+<section id="app" hidden>
+  <div class="row"><h2 id="hello">Hi</h2><button class="link" id="logout">Log out</button></div>
+  <div class="hero">
+    <small>Available balance</small>
+    <div class="bal" id="bal">...</div>
+    <div class="row"><small id="acct"></small><button class="link" id="copy" style="color:inherit">Copy</button></div>
+  </div>
+  <button class="btn small" id="fund" hidden style="width:100%;margin-bottom:6px">Add test money (₦5,000)</button>
+
+  <form class="card" id="sendForm" autocomplete="off">
+    <h3>Send money</h3>
+    <label for="to">Recipient account number</label><input id="to" inputmode="numeric" maxlength="10">
+    <label for="amt">Amount (₦)</label><input id="amt" inputmode="decimal">
+    <label for="note">Note (optional)</label><input id="note" maxlength="60">
+    <div id="pinBox" hidden><label for="spin">Enter your PIN to confirm</label><input id="spin" type="password" inputmode="numeric" maxlength="6"></div>
+    <button class="btn" id="sendBtn" type="submit">Send</button>
+    <div id="sendMsg" class="msg" role="status" hidden></div>
+  </form>
+
+  <div class="card"><div class="row"><h3>Recent activity</h3><button class="link" id="refresh">Refresh</button></div><div id="txs"></div></div>
+</section>
+</main>
 <script>
-const N=n=>"₦"+Math.round(n).toLocaleString("en-NG");
-let S={bal:150000,tab:"home",frozen:false,usd:0,goal:{name:"New laptop",target:400000,saved:85000},loan:null,
-tx:[{t:"Salary – Acme Ltd",a:250000,d:"Today"},{t:"MTN data",a:-3000,d:"Yesterday"},{t:"Transfer to Tunde",a:-5000,d:"Mon"}],
-chat:[{m:"Hi, I’m Vue. Try: “send 5000 to Ada”, “buy 1000 airtime”, or “how much did I spend?”"}],
-contacts:["Tunde","Ada","Chioma","Ibrahim"],last:null};
-try{const x=JSON.parse(localStorage.getItem("pv")||"null");if(x)S=x}catch(e){}
-const save=()=>{try{localStorage.setItem("pv",JSON.stringify(S))}catch(e){}};
-const $=s=>document.querySelector(s);
-const risk=(amt,who)=>{let r=5;if(amt>S.bal*.5)r+=35;if(amt>=100000)r+=25;if(who&&!S.contacts.map(c=>c.toLowerCase()).includes(who.toLowerCase()))r+=30;const h=new Date().getHours();if(h<5)r+=15;return Math.min(r,98)};
-function pay(title,amt,who){
- if(amt<=0||isNaN(amt))return"Enter an amount above ₦0.";
- if(amt>S.bal)return"Insufficient balance. You have "+N(S.bal)+".";
- const r=risk(amt,who);
- if(r>=60)return"Blocked: fraud score "+r+"/100. "+(who?who+" is a new payee. ":"")+"Add them as a contact or verify with face ID to continue.";
- S.bal-=amt;S.tx.unshift({t:title,a:-amt,d:"Just now"});save();
- return"Done. "+title+" for "+N(amt)+" (fraud score "+r+"/100, low risk).";}
-function ask(q){
- q=q.trim();if(!q)return;S.chat.push({u:q});let a;const l=q.toLowerCase();const n=parseFloat((l.replace(/,/g,"").match(/\d+(\.\d+)?/)||[])[0]);
- const w=l.match(/to ([a-z]+)/);
- if(/send|transfer/.test(l)&&w){a=pay("Transfer to "+w[1][0].toUpperCase()+w[1].slice(1),n,w[1])}
- else if(/airtime/.test(l))a=pay("Airtime",n);
- else if(/data/.test(l))a=pay("Data bundle",n||2000);
- else if(/spen|spent/.test(l)){const s=S.tx.filter(t=>t.a<0).reduce((x,t)=>x-t.a,0);a="You’ve spent "+N(s)+" recently. Airtime, data and transfers lead. A weekly cap of "+N(s*.8)+" would save about "+N(s*.2)+"."}
- else if(/balance/.test(l))a="Your balance is "+N(S.bal)+".";
- else if(/save/.test(l)&&n){const m=Math.min(n,S.bal);S.bal-=m;S.goal.saved+=m;S.tx.unshift({t:"Saved to "+S.goal.name,a:-m,d:"Just now"});a="Moved "+N(m)+" to “"+S.goal.name+"”.";save()}
- else a="I can send money, buy airtime or data, move money to savings, and summarise spending. Try “send 5000 to Ada”.";
- S.chat.push({m:a});save();render()}
-const tabs={home:"Home",pay:"Pay",save:"Save",cards:"Cards",loans:"Loans"};
-function render(){
- $("#nav").innerHTML=Object.entries(tabs).map(([k,v])=>`<button data-t="${k}" ${S.tab==k?'aria-current="true"':''}>${v}</button>`).join("");
- $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;render();scrollTo(0,0)});
- const v=views[S.tab]();$("#app").innerHTML=v;bind();}
-const hero=()=>`<div class="hero"><small>Available balance</small><div class="bal">${N(S.bal)}</div><div class="acct">Account 0123456789 · Payvue MFB</div></div>`;
-const txs=()=>S.tx.slice(0,6).map(t=>`<div class="tx"><span>${t.t}<br><span class="mut">${t.d}</span></span><b class="${t.a<0?"neg":"pos"}">${t.a<0?"−":"+"}${N(Math.abs(t.a))}</b></div>`).join("");
-const views={
-home:()=>hero()+`<div class="grid">${[["⇄","Send","pay"],["☎","Airtime","pay"],["▣","Cards","cards"],["◔","Save","save"]].map(x=>`<button class="tile" data-go="${x[2]}"><b>${x[0]}</b>${x[1]}</button>`).join("")}</div>
-<h3>Ask Vue</h3><div id="chat">${S.chat.slice(-4).map(c=>c.u?`<div class="mut" style="text-align:right">${c.u.replace(/</g,"&lt;")}</div>`:`<div class="msg">${c.m}</div>`).join("")}</div>
-<div class="ai"><input id="q" placeholder="Send ₦5,000 to Tunde" aria-label="Ask Vue"><button class="btn" id="go">Ask</button></div>
-<div class="card"><h3>Recent activity</h3>${txs()}</div>`,
-pay:()=>`<h2>Pay</h2><div class="card"><h3>Send money</h3><label>Recipient<select id="who">${S.contacts.map(c=>`<option>${c}</option>`).join("")}<option value="new">New payee (unverified)</option></select></label><label>Amount (₦)<input id="amt" type="number" inputmode="numeric" min="1"></label><button class="btn" id="send">Send money</button><p class="mut" id="out" role="status"></p></div>
-<div class="card"><h3>Airtime, data and bills</h3><label>Service<select id="svc"><option>Airtime</option><option>Data bundle</option><option>Electricity</option><option>Cable TV</option></select></label><label>Amount (₦)<input id="bamt" type="number" inputmode="numeric" min="1"></label><button class="btn" id="bill">Pay now</button><p class="mut" id="out2" role="status"></p></div>
-<div class="card"><h3>Offline payment</h3><p class="mut">No network? Dial <b>*347*7#</b> to pay through USSD, or tap phones to pay with NFC.</p></div>`,
-save:()=>{const g=S.goal,p=Math.min(100,g.saved/g.target*100);return`<h2>Save</h2><div class="card"><div class="sw"><h3>${g.name}</h3><span class="chip">Locked until target</span></div><p>${N(g.saved)} of ${N(g.target)}</p><div class="bar"><i style="width:${p}%"></i></div><p class="mut">Round-ups add the change from every payment. Interest 12% a year.</p><label>Add to goal (₦)<input id="samt" type="number" inputmode="numeric" min="1"></label><button class="btn" id="sv">Save now</button><p class="mut" id="out" role="status"></p></div><div class="card"><h3>Group wallet</h3><p class="mut">Split bills and pool money with friends. Coming in the next build.</p></div>`},
-cards:()=>`<h2>Cards</h2><div class="vcard ${S.frozen?"off":""}"><div class="sw"><b>Payvue</b><span>${S.frozen?"Frozen":"Active"}</span></div><p style="font-size:20px;letter-spacing:2px;margin:30px 0 4px">•••• •••• •••• 4417</p><span>Naira virtual card</span></div>
-<div class="card sw"><div><h3>Freeze card</h3><span class="mut">Blocks all spending instantly</span></div><button class="btn ${S.frozen?"":"ghost"}" id="frz" aria-pressed="${S.frozen}">${S.frozen?"Unfreeze":"Freeze"}</button></div>
-<div class="card"><h3>USD wallet</h3><p>$${S.usd.toFixed(2)}</p><button class="btn" id="usd">Convert ₦50,000 to USD</button><p class="mut" id="out" role="status">Rate: ₦1,500 per $1 (sample rate).</p></div>`,
-loans:()=>{const sc=Math.min(850,500+S.tx.length*18+Math.floor(S.bal/5000));const lim=Math.round(sc*300/1000)*1000;return`<h2>Loans</h2><div class="card"><h3>Your credit score: ${sc}</h3><p class="mut">Built from wallet activity and bill payments. No paperwork.</p><p>You can borrow up to <b>${N(lim)}</b></p>${S.loan?`<p class="pos">Active loan: ${N(S.loan)} due in 30 days.</p>`:`<button class="btn" id="ln" data-lim="${lim}">Get ${N(lim)} now</button>`}<p class="mut" id="out" role="status">5% flat fee. Repay in 30 days.</p></div>
-<div class="card"><h3>Business tools</h3><p class="mut">Payment links, invoices and auto-bookkeeping for small businesses. Coming in the next build.</p></div>`}};
-function bind(){
- document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.go;render()});
- const on=(i,f)=>{const e=$(i);if(e)e.onclick=f};
- on("#go",()=>ask($("#q").value));const q=$("#q");if(q)q.onkeydown=e=>{if(e.key=="Enter")ask(q.value)};
- on("#send",()=>{const s=$("#who");const nw=s.value=="new";$("#out").textContent=pay("Transfer to "+(nw?"new payee":s.value),+$("#amt").value,nw?"stranger":s.value);render2()});
- on("#bill",()=>{$("#out2").textContent=pay($("#svc").value,+$("#bamt").value);render2()});
- on("#sv",()=>{const a=+$("#samt").value;if(a>0&&a<=S.bal){S.bal-=a;S.goal.saved+=a;S.tx.unshift({t:"Saved to "+S.goal.name,a:-a,d:"Just now"});save();render()}else $("#out").textContent="Enter an amount up to "+N(S.bal)+"."});
- on("#frz",()=>{S.frozen=!S.frozen;save();render()});
- on("#usd",()=>{if(S.bal>=50000){S.bal-=50000;S.usd+=50000/1500;S.tx.unshift({t:"Converted to USD",a:-50000,d:"Just now"});save();render()}else $("#out").textContent="Not enough balance."});
- on("#ln",e=>{const l=+e.target.dataset.lim;S.loan=l*1.05;S.bal+=l;S.tx.unshift({t:"Loan disbursed",a:l,d:"Just now"});save();render()});
+const API = 'https://payvue.onrender.com';
+const $ = (s) => document.querySelector(s);
+const naira = (k) => '₦' + (k / 100).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const store = {
+  get: (k, area = sessionStorage) => { try { return area.getItem(k); } catch { return null; } },
+  set: (k, v, area = sessionStorage) => { try { area.setItem(k, v); } catch {} },
+  del: (k) => { try { sessionStorage.removeItem(k); } catch {} },
+};
+function deviceId() {
+  let d = store.get('pv_dev', localStorage);
+  if (!d) { d = crypto.randomUUID(); store.set('pv_dev', d, localStorage); }
+  return d;
 }
-function render2(){const o=$("#out")?.textContent,o2=$("#out2")?.textContent;const a=document.activeElement.id;render();if(o&&$("#out"))$("#out").textContent=o;if(o2&&$("#out2"))$("#out2").textContent=o2}
-render();
+function say(el, text, kind, list) {
+  el.hidden = false; el.className = 'msg ' + (kind || ''); el.textContent = text;
+  if (list && list.length) { const ul = document.createElement('ul'); list.forEach((x) => { const li = document.createElement('li'); li.textContent = x; ul.appendChild(li); }); el.appendChild(ul); }
+}
+async function api(path, { method = 'GET', body, key } = {}) {
+  const h = { 'Content-Type': 'application/json', 'X-Device-Id': deviceId() };
+  const t = store.get('pv_tok'); if (t) h.Authorization = 'Bearer ' + t;
+  if (key) h['Idempotency-Key'] = key;
+  const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 75000);
+  try {
+    const r = await fetch(API + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal });
+    let data = {}; try { data = await r.json(); } catch {}
+    if (r.status === 401 && t) { logout(); }
+    return { ok: r.ok, status: r.status, data };
+  } catch { return { ok: false, status: 0, data: { message: 'Cannot reach the server. Check your internet and try again.' } }; }
+  finally { clearTimeout(to); }
+}
+
+/* ---- sign up / log in ---- */
+let mode = 'up';
+function setMode(m) {
+  mode = m;
+  $('#tabUp').setAttribute('aria-selected', m === 'up'); $('#tabIn').setAttribute('aria-selected', m === 'in');
+  $('#nameRow').hidden = m !== 'up'; $('#authBtn').textContent = m === 'up' ? 'Create account' : 'Log in';
+  $('#authMsg').hidden = true;
+}
+$('#tabUp').onclick = () => setMode('up'); $('#tabIn').onclick = () => setMode('in');
+$('#authBtn').onclick = async () => {
+  const phone = $('#phone').value.trim(), pin = $('#pin').value.trim(), name = $('#name').value.trim();
+  if (!/^\+?\d{10,15}$/.test(phone)) return say($('#authMsg'), 'Enter a valid phone number.', 'err');
+  if (!/^\d{4,6}$/.test(pin)) return say($('#authMsg'), 'Your PIN must be 4 to 6 digits.', 'err');
+  if (mode === 'up' && !name) return say($('#authMsg'), 'Enter your name.', 'err');
+  $('#authBtn').disabled = true; say($('#authMsg'), 'Please wait...');
+  const r = mode === 'up' ? await api('/auth/register', { method: 'POST', body: { phone, name, pin } }) : await api('/auth/login', { method: 'POST', body: { phone, pin } });
+  $('#authBtn').disabled = false;
+  if (!r.ok) return say($('#authMsg'), r.status === 409 ? 'That phone number is already registered. Log in instead.' : (r.data.message || 'Something went wrong.'), 'err');
+  store.set('pv_tok', r.data.token);
+  if (r.data.user) store.set('pv_name', r.data.user.name);
+  $('#pin').value = '';
+  showApp();
+};
+function logout() { store.del('pv_tok'); store.del('pv_name'); $('#auth').hidden = false; $('#app').hidden = true; setMode('in'); }
+$('#logout').onclick = logout;
+
+/* ---- wallet ---- */
+async function showApp() {
+  $('#auth').hidden = true; $('#app').hidden = false;
+  $('#hello').textContent = 'Hi' + (store.get('pv_name') ? ', ' + store.get('pv_name').split(' ')[0] : '');
+  $('#fund').hidden = store.get('pv_nofund') === '1';
+  await load();
+}
+async function load() {
+  const w = await api('/wallet');
+  if (w.ok) { $('#bal').textContent = naira(w.data.balanceKobo); $('#acct').textContent = 'Account ' + w.data.accountNumber; $('#copy').dataset.n = w.data.accountNumber; }
+  const t = await api('/wallet/transactions');
+  const box = $('#txs'); box.textContent = '';
+  if (!t.ok || !t.data.length) { box.innerHTML = '<p class="mut">No activity yet.</p>'; return; }
+  t.data.forEach((x) => {
+    const d = document.createElement('div'); d.className = 'tx';
+    const left = document.createElement('div');
+    const label = x.kind === 'transfer' ? (x.amount_kobo < 0 ? 'Sent to ' + (x.meta && x.meta.to || '') : 'Received') : x.kind.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+    left.textContent = label;
+    const dt = document.createElement('div'); dt.className = 'mut'; dt.textContent = new Date(x.created_at).toLocaleString(); left.appendChild(dt);
+    const amt = document.createElement('b'); amt.className = x.amount_kobo < 0 ? 'neg' : 'pos';
+    amt.textContent = (x.amount_kobo < 0 ? '−' : '+') + naira(Math.abs(x.amount_kobo));
+    d.append(left, amt); box.appendChild(d);
+  });
+}
+$('#refresh').onclick = load;
+$('#copy').onclick = async () => { try { await navigator.clipboard.writeText($('#copy').dataset.n || ''); $('#copy').textContent = 'Copied'; setTimeout(() => ($('#copy').textContent = 'Copy'), 1500); } catch {} };
+$('#fund').onclick = async () => {
+  const r = await api('/wallet/dev-fund', { method: 'POST', body: { amount_kobo: 500000 } });
+  if (r.status === 404) { store.set('pv_nofund', '1'); $('#fund').hidden = true; return; }
+  if (r.ok) load(); else say($('#sendMsg'), r.data.message || 'Could not add test money.', 'err');
+};
+
+/* ---- send money ---- */
+let attempt = null; // keeps one idempotency key per payment so retries never double-charge
+$('#sendForm').addEventListener('input', (e) => { if (e.target.id !== 'spin') { attempt = null; $('#pinBox').hidden = true; } });
+$('#sendForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const to = $('#to').value.trim(), amt = Math.round(parseFloat($('#amt').value) * 100), note = $('#note').value.trim(), pin = $('#spin').value.trim();
+  const m = $('#sendMsg');
+  if (!/^\d{10}$/.test(to)) return say(m, 'Enter the 10-digit account number.', 'err');
+  if (!(amt > 0)) return say(m, 'Enter an amount above ₦0.', 'err');
+  if (!attempt) attempt = crypto.randomUUID();
+  $('#sendBtn').disabled = true; say(m, 'Sending...');
+  const r = await api('/wallet/transfer', { method: 'POST', key: attempt, body: { to_account_number: to, amount_kobo: amt, narration: note || undefined, pin: pin || undefined } });
+  $('#sendBtn').disabled = false;
+  const s = r.data.status;
+  if (s === 'completed' || s === 'duplicate') {
+    say(m, 'Sent ' + naira(amt) + ' to ' + to + '.', 'ok'); attempt = null; $('#sendForm').reset(); $('#pinBox').hidden = true; load();
+  } else if (s === 'step_up_required') {
+    $('#pinBox').hidden = false; $('#spin').focus(); say(m, 'For your safety, confirm this payment with your PIN, then tap Send again.', '', r.data.risk && r.data.risk.reasons);
+  } else if (s === 'blocked') {
+    attempt = null; say(m, 'We blocked this payment because it looks risky.', 'err', r.data.risk && r.data.risk.reasons);
+  } else {
+    if (r.data.error === 'BAD_PIN') { $('#spin').value = ''; }
+    say(m, r.data.message || 'Payment failed.', 'err');
+  }
+};
+
+/* ---- start ---- */
+(async function init() {
+  setMode('up');
+  if (store.get('pv_tok')) showApp();
+  $('#banner').hidden = false;
+  try { await fetch(API + '/health'); } catch {}
+  $('#banner').hidden = true;
+})();
 </script></body></html>
