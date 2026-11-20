@@ -6,21 +6,23 @@
 :root{--bg:#F4F6F1;--card:#fff;--ink:#0E1B2C;--mut:#5d6b7c;--line:#e1e6dd;--brand:#0E1B2C;--on:#fff;--acc:#F5B700;--ok:#12805C;--bad:#C93A3F;color-scheme:light}
 @media(prefers-color-scheme:dark){:root{--bg:#0A121D;--card:#132033;--ink:#EEF2F6;--mut:#9aa9bb;--line:#22344c;--brand:#1B3150;--ok:#3DD6A3;--bad:#FF7A7F;color-scheme:dark}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
-main{max-width:480px;margin:0 auto;padding:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-top:env(safe-area-inset-top,0)}
+main{max-width:480px;margin:0 auto;padding:16px 16px 96px}
 h1,h2,h3{margin:0;font-weight:800}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
 .hero{background:var(--brand);color:var(--on);border-radius:22px;padding:20px;margin:12px 0}
 .hero small{opacity:.75}.bal{font-size:38px;font-weight:800;letter-spacing:-1px;margin:4px 0 8px}
 .row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 label{display:block;font-size:14px;color:var(--mut);margin-top:10px}
-input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;margin-top:4px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;margin-top:4px}
 button{font:inherit;cursor:pointer}
-button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-.btn{background:var(--acc);color:#0E1B2C;border:0;border-radius:12px;padding:12px 16px;font-weight:800;width:100%;margin-top:14px}
-.btn:disabled{opacity:.6}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.btn{background:var(--acc);color:#0E1B2C;border:0;border-radius:12px;padding:12px 16px;font-weight:800;width:100%;margin-top:12px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.6}.btn.small{width:auto;margin:0;padding:10px 14px}
 .link{background:none;border:0;color:inherit;text-decoration:underline;padding:4px}
-.small{width:auto;margin:0;padding:8px 12px;font-size:14px}
+.avatar{width:40px;height:40px;border-radius:50%;border:0;background:var(--brand);color:var(--on);font-weight:800}
 .tabs{display:flex;gap:8px;margin:14px 0 4px}
 .tabs button{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700}
 .tabs button[aria-selected=true]{background:var(--brand);color:var(--on)}
@@ -29,6 +31,14 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-of
 .msg ul{margin:6px 0 0 18px;padding:0}
 .tx{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .tx:last-child{border:0}.neg{color:var(--bad)}.pos{color:var(--ok)}.mut{color:var(--mut);font-size:13px}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ok)}
+.chip{padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--line)}
+.vcard{background:linear-gradient(135deg,#0E1B2C,#2c4a73);color:#fff;border-radius:18px;padding:18px;margin:12px 0}
+.vcard.off{filter:grayscale(1);opacity:.65}
+.vcard .no{font-size:20px;letter-spacing:2px;margin:22px 0 4px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0)}
+nav button{flex:1;background:none;border:0;padding:12px 0;color:var(--mut);font-weight:600;font-size:14px}
+nav button[aria-current=true]{color:var(--ink);box-shadow:inset 0 3px var(--acc)}
 #banner{background:var(--acc);color:#0E1B2C;text-align:center;padding:8px 12px;font-size:14px;font-weight:600}
 [hidden]{display:none!important}
 </style></head><body>
@@ -36,10 +46,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-of
 <main>
 <section id="auth">
   <h1>Payvue</h1><p class="mut">Send, save and pay, all in one place.</p>
-  <div class="tabs" role="tablist">
-    <button role="tab" id="tabUp" aria-selected="true">Sign up</button>
-    <button role="tab" id="tabIn" aria-selected="false">Log in</button>
-  </div>
+  <div class="tabs" role="tablist"><button role="tab" id="tabUp" aria-selected="true">Sign up</button><button role="tab" id="tabIn" aria-selected="false">Log in</button></div>
   <div class="card">
     <div id="nameRow"><label for="name">Full name</label><input id="name" autocomplete="name"></div>
     <label for="phone">Phone number</label><input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="08012345678">
@@ -50,147 +57,259 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-of
 </section>
 
 <section id="app" hidden>
-  <div class="row"><h2 id="hello">Hi</h2><button class="link" id="logout">Log out</button></div>
-  <div class="hero">
-    <small>Available balance</small>
-    <div class="bal" id="bal">...</div>
-    <div class="row"><small id="acct"></small><button class="link" id="copy" style="color:inherit">Copy</button></div>
+  <div class="row"><h2 id="hello">Hi</h2><button class="avatar" id="meBtn" aria-label="Profile">P</button></div>
+
+  <div id="v-home" class="view">
+    <div class="hero"><small>Available balance</small><div class="bal" id="bal">...</div><small id="acct"></small></div>
+    <button class="btn small" id="fund" hidden style="width:100%">Add test money (₦5,000)</button>
+    <div class="card"><h3>Ask Vue</h3>
+      <div class="row2" style="grid-template-columns:1fr auto;margin-top:8px"><input id="ask" placeholder="Send 5000 to Ada" aria-label="Ask Vue"><button class="btn small" id="askBtn">Ask</button></div>
+      <div id="askMsg" class="msg" role="status" hidden></div></div>
+    <div class="card"><div class="row"><h3>Recent activity</h3><button class="link" id="refresh">Refresh</button></div><div id="txs"></div></div>
   </div>
-  <button class="btn small" id="fund" hidden style="width:100%;margin-bottom:6px">Add test money (₦5,000)</button>
 
-  <form class="card" id="sendForm" autocomplete="off">
-    <h3>Send money</h3>
-    <label for="to">Recipient account number</label><input id="to" inputmode="numeric" maxlength="10">
-    <label for="amt">Amount (₦)</label><input id="amt" inputmode="decimal">
-    <label for="note">Note (optional)</label><input id="note" maxlength="60">
-    <div id="pinBox" hidden><label for="spin">Enter your PIN to confirm</label><input id="spin" type="password" inputmode="numeric" maxlength="6"></div>
-    <button class="btn" id="sendBtn" type="submit">Send</button>
-    <div id="sendMsg" class="msg" role="status" hidden></div>
-  </form>
+  <div id="v-pay" class="view" hidden>
+    <h2>Pay</h2><p class="mut">Balance: <b id="bal2"></b></p>
+    <form class="card" id="sendForm" autocomplete="off"><h3>Send money</h3>
+      <label for="to">Recipient account number</label><input id="to" inputmode="numeric" maxlength="10">
+      <label for="amt">Amount (₦)</label><input id="amt" inputmode="decimal">
+      <label for="note">Note (optional)</label><input id="note" maxlength="60">
+      <div id="pinBox" hidden><label for="spin">Enter your PIN to confirm</label><input id="spin" type="password" inputmode="numeric" maxlength="6"></div>
+      <button class="btn" id="sendBtn" type="submit">Send</button><div id="sendMsg" class="msg" role="status" hidden></div></form>
+    <form class="card" id="billForm" autocomplete="off"><h3>Airtime, data and bills</h3>
+      <label for="svc">Service</label><select id="svc"><option value="airtime">Airtime</option><option value="data">Data bundle</option><option value="electricity">Electricity</option><option value="cable">Cable TV</option></select>
+      <label for="bacct">Phone, meter or smartcard number</label><input id="bacct" inputmode="numeric">
+      <label for="bamt">Amount (₦)</label><input id="bamt" inputmode="decimal">
+      <button class="btn" id="billBtn" type="submit">Pay now</button><div id="billMsg" class="msg" role="status" hidden></div></form>
+  </div>
 
-  <div class="card"><div class="row"><h3>Recent activity</h3><button class="link" id="refresh">Refresh</button></div><div id="txs"></div></div>
+  <div id="v-save" class="view" hidden>
+    <h2>Save</h2><div id="goals"></div>
+    <form class="card" id="goalForm" autocomplete="off"><h3>New savings goal</h3>
+      <label for="gname">Goal name</label><input id="gname" maxlength="40" placeholder="New laptop">
+      <label for="gtarget">Target (₦)</label><input id="gtarget" inputmode="decimal">
+      <button class="btn" type="submit">Create goal</button><div id="goalMsg" class="msg" role="status" hidden></div></form>
+  </div>
+
+  <div id="v-cards" class="view" hidden>
+    <h2>Cards</h2><div id="cardList"></div>
+    <button class="btn" id="newCard">Create virtual card</button><div id="cardMsg" class="msg" role="status" hidden></div>
+    <p class="mut">Test cards only. Real card issuing needs a licensed issuer.</p>
+  </div>
+
+  <div id="v-loans" class="view" hidden>
+    <h2>Loans</h2>
+    <div class="card"><p class="mut">You can borrow up to</p><div class="bal" id="limit">...</div><p class="mut">Fee: <span id="fee"></span> flat, repay within 30 days. Your limit grows as you receive money in your wallet.</p>
+      <label for="lamt">Amount (₦)</label><input id="lamt" inputmode="decimal">
+      <button class="btn" id="borrow">Get loan</button><button class="btn ghost" id="repay">Repay loan</button>
+      <div id="loanMsg" class="msg" role="status" hidden></div></div>
+  </div>
+
+  <div id="v-me" class="view" hidden>
+    <h2>Profile</h2>
+    <div class="card"><p class="mut">Name</p><b id="meName">-</b><p class="mut">Phone</p><b id="mePhone">-</b><p class="mut">Account number</p><b id="meAcct">-</b>
+      <div class="row2" style="margin-top:6px"><button class="btn ghost" id="copy">Copy account number</button><button class="btn" id="logout">Log out</button></div></div>
+  </div>
 </section>
 </main>
+<nav id="nav" hidden>
+  <button data-t="home">Home</button><button data-t="pay">Pay</button><button data-t="save">Save</button><button data-t="cards">Cards</button><button data-t="loans">Loans</button>
+</nav>
 <script>
 const API = 'https://payvue.onrender.com';
 const $ = (s) => document.querySelector(s);
 const naira = (k) => '₦' + (k / 100).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const toKobo = (v) => Math.round(parseFloat(String(v).replace(/,/g, '')) * 100);
 const store = {
-  get: (k, area = sessionStorage) => { try { return area.getItem(k); } catch { return null; } },
-  set: (k, v, area = sessionStorage) => { try { area.setItem(k, v); } catch {} },
+  get: (k, a = sessionStorage) => { try { return a.getItem(k); } catch { return null; } },
+  set: (k, v, a = sessionStorage) => { try { a.setItem(k, v); } catch {} },
   del: (k) => { try { sessionStorage.removeItem(k); } catch {} },
 };
-function deviceId() {
-  let d = store.get('pv_dev', localStorage);
-  if (!d) { d = crypto.randomUUID(); store.set('pv_dev', d, localStorage); }
-  return d;
-}
+const h = (t, a = {}, ...k) => { const e = document.createElement(t); for (const [x, v] of Object.entries(a)) { if (x === 'onclick') e.onclick = v; else e.setAttribute(x, v); } e.append(...k); return e; };
+function deviceId() { let d = store.get('pv_dev', localStorage); if (!d) { d = crypto.randomUUID(); store.set('pv_dev', d, localStorage); } return d; }
 function say(el, text, kind, list) {
   el.hidden = false; el.className = 'msg ' + (kind || ''); el.textContent = text;
-  if (list && list.length) { const ul = document.createElement('ul'); list.forEach((x) => { const li = document.createElement('li'); li.textContent = x; ul.appendChild(li); }); el.appendChild(ul); }
+  if (list && list.length) el.append(h('ul', {}, ...list.map((x) => h('li', {}, x))));
 }
 async function api(path, { method = 'GET', body, key } = {}) {
-  const h = { 'Content-Type': 'application/json', 'X-Device-Id': deviceId() };
-  const t = store.get('pv_tok'); if (t) h.Authorization = 'Bearer ' + t;
-  if (key) h['Idempotency-Key'] = key;
+  const hd = { 'Content-Type': 'application/json', 'X-Device-Id': deviceId() };
+  const t = store.get('pv_tok'); if (t) hd.Authorization = 'Bearer ' + t;
+  if (key) hd['Idempotency-Key'] = key;
   const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 75000);
   try {
-    const r = await fetch(API + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal });
+    const r = await fetch(API + path, { method, headers: hd, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal });
     let data = {}; try { data = await r.json(); } catch {}
-    if (r.status === 401 && t) { logout(); }
+    if (r.status === 401 && t) logout();
     return { ok: r.ok, status: r.status, data };
   } catch { return { ok: false, status: 0, data: { message: 'Cannot reach the server. Check your internet and try again.' } }; }
   finally { clearTimeout(to); }
 }
+async function run(btn, fn) { btn.disabled = true; try { await fn(); } finally { btn.disabled = false; } }
 
-/* ---- sign up / log in ---- */
+/* ---------- auth ---------- */
 let mode = 'up';
-function setMode(m) {
-  mode = m;
-  $('#tabUp').setAttribute('aria-selected', m === 'up'); $('#tabIn').setAttribute('aria-selected', m === 'in');
-  $('#nameRow').hidden = m !== 'up'; $('#authBtn').textContent = m === 'up' ? 'Create account' : 'Log in';
-  $('#authMsg').hidden = true;
-}
+function setMode(m) { mode = m; $('#tabUp').setAttribute('aria-selected', m === 'up'); $('#tabIn').setAttribute('aria-selected', m === 'in'); $('#nameRow').hidden = m !== 'up'; $('#authBtn').textContent = m === 'up' ? 'Create account' : 'Log in'; $('#authMsg').hidden = true; }
 $('#tabUp').onclick = () => setMode('up'); $('#tabIn').onclick = () => setMode('in');
-$('#authBtn').onclick = async () => {
-  const phone = $('#phone').value.trim(), pin = $('#pin').value.trim(), name = $('#name').value.trim();
-  if (!/^\+?\d{10,15}$/.test(phone)) return say($('#authMsg'), 'Enter a valid phone number.', 'err');
-  if (!/^\d{4,6}$/.test(pin)) return say($('#authMsg'), 'Your PIN must be 4 to 6 digits.', 'err');
-  if (mode === 'up' && !name) return say($('#authMsg'), 'Enter your name.', 'err');
-  $('#authBtn').disabled = true; say($('#authMsg'), 'Please wait...');
+$('#authBtn').onclick = () => run($('#authBtn'), async () => {
+  const phone = $('#phone').value.trim(), pin = $('#pin').value.trim(), name = $('#name').value.trim(), m = $('#authMsg');
+  if (!/^\+?\d{10,15}$/.test(phone)) return say(m, 'Enter a valid phone number.', 'err');
+  if (!/^\d{4,6}$/.test(pin)) return say(m, 'Your PIN must be 4 to 6 digits.', 'err');
+  if (mode === 'up' && !name) return say(m, 'Enter your name.', 'err');
+  say(m, 'Please wait...');
   const r = mode === 'up' ? await api('/auth/register', { method: 'POST', body: { phone, name, pin } }) : await api('/auth/login', { method: 'POST', body: { phone, pin } });
-  $('#authBtn').disabled = false;
-  if (!r.ok) return say($('#authMsg'), r.status === 409 ? 'That phone number is already registered. Log in instead.' : (r.data.message || 'Something went wrong.'), 'err');
-  store.set('pv_tok', r.data.token);
+  if (!r.ok) return say(m, r.status === 409 ? 'That phone number is already registered. Log in instead.' : (r.data.message || 'Something went wrong.'), 'err');
+  store.set('pv_tok', r.data.token); store.set('pv_phone', phone);
   if (r.data.user) store.set('pv_name', r.data.user.name);
-  $('#pin').value = '';
-  showApp();
-};
-function logout() { store.del('pv_tok'); store.del('pv_name'); $('#auth').hidden = false; $('#app').hidden = true; setMode('in'); }
+  $('#pin').value = ''; enter();
+});
+function logout() { ['pv_tok', 'pv_name', 'pv_phone'].forEach(store.del); $('#auth').hidden = false; $('#app').hidden = true; $('#nav').hidden = true; setMode('in'); }
 $('#logout').onclick = logout;
 
-/* ---- wallet ---- */
-async function showApp() {
-  $('#auth').hidden = true; $('#app').hidden = false;
-  $('#hello').textContent = 'Hi' + (store.get('pv_name') ? ', ' + store.get('pv_name').split(' ')[0] : '');
-  $('#fund').hidden = store.get('pv_nofund') === '1';
-  await load();
+/* ---------- navigation ---------- */
+const loaders = { home: () => load(), pay: () => loadBal(), save: () => loadSave(), cards: () => loadCards(), loans: () => loadLoans(), me: () => loadBal() };
+function show(t) {
+  document.querySelectorAll('.view').forEach((v) => (v.hidden = v.id !== 'v-' + t));
+  document.querySelectorAll('#nav button').forEach((b) => b.setAttribute('aria-current', b.dataset.t === t));
+  scrollTo(0, 0); loaders[t]();
+}
+document.querySelectorAll('#nav button').forEach((b) => (b.onclick = () => show(b.dataset.t)));
+$('#meBtn').onclick = () => show('me');
+function enter() { $('#auth').hidden = true; $('#app').hidden = false; $('#nav').hidden = false; $('#fund').hidden = store.get('pv_nofund') === '1'; show('home'); }
+
+/* ---------- wallet ---------- */
+let txs = [], acctNo = '';
+async function loadBal() {
+  const w = await api('/wallet'); if (!w.ok) return;
+  $('#bal').textContent = $('#bal2').textContent = naira(w.data.balanceKobo);
+  acctNo = w.data.accountNumber; $('#acct').textContent = 'Account ' + acctNo; $('#meAcct').textContent = acctNo;
+  const name = w.data.name || store.get('pv_name') || '';
+  if (name) store.set('pv_name', name);
+  $('#hello').textContent = 'Hi' + (name ? ', ' + name.split(' ')[0] : ''); $('#meName').textContent = name || '-';
+  $('#meBtn').textContent = (name || 'P')[0].toUpperCase(); $('#mePhone').textContent = store.get('pv_phone') || '-';
 }
 async function load() {
-  const w = await api('/wallet');
-  if (w.ok) { $('#bal').textContent = naira(w.data.balanceKobo); $('#acct').textContent = 'Account ' + w.data.accountNumber; $('#copy').dataset.n = w.data.accountNumber; }
-  const t = await api('/wallet/transactions');
-  const box = $('#txs'); box.textContent = '';
-  if (!t.ok || !t.data.length) { box.innerHTML = '<p class="mut">No activity yet.</p>'; return; }
-  t.data.forEach((x) => {
-    const d = document.createElement('div'); d.className = 'tx';
-    const left = document.createElement('div');
-    const label = x.kind === 'transfer' ? (x.amount_kobo < 0 ? 'Sent to ' + (x.meta && x.meta.to || '') : 'Received') : x.kind.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
-    left.textContent = label;
-    const dt = document.createElement('div'); dt.className = 'mut'; dt.textContent = new Date(x.created_at).toLocaleString(); left.appendChild(dt);
-    const amt = document.createElement('b'); amt.className = x.amount_kobo < 0 ? 'neg' : 'pos';
-    amt.textContent = (x.amount_kobo < 0 ? '−' : '+') + naira(Math.abs(x.amount_kobo));
-    d.append(left, amt); box.appendChild(d);
+  await loadBal();
+  const t = await api('/wallet/transactions'); const box = $('#txs'); box.textContent = '';
+  txs = t.ok ? t.data : [];
+  if (!txs.length) return box.append(h('p', { class: 'mut' }, 'No activity yet.'));
+  txs.forEach((x) => {
+    const label = x.kind === 'transfer' ? (x.amount_kobo < 0 ? 'Sent to ' + ((x.meta && x.meta.to) || '') : 'Received') : x.kind.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+    box.append(h('div', { class: 'tx' }, h('div', {}, label, h('div', { class: 'mut' }, new Date(x.created_at).toLocaleString())),
+      h('b', { class: x.amount_kobo < 0 ? 'neg' : 'pos' }, (x.amount_kobo < 0 ? '−' : '+') + naira(Math.abs(x.amount_kobo)))));
   });
 }
 $('#refresh').onclick = load;
-$('#copy').onclick = async () => { try { await navigator.clipboard.writeText($('#copy').dataset.n || ''); $('#copy').textContent = 'Copied'; setTimeout(() => ($('#copy').textContent = 'Copy'), 1500); } catch {} };
-$('#fund').onclick = async () => {
+$('#copy').onclick = async () => { try { await navigator.clipboard.writeText(acctNo); $('#copy').textContent = 'Copied'; setTimeout(() => ($('#copy').textContent = 'Copy account number'), 1500); } catch {} };
+$('#fund').onclick = () => run($('#fund'), async () => {
   const r = await api('/wallet/dev-fund', { method: 'POST', body: { amount_kobo: 500000 } });
   if (r.status === 404) { store.set('pv_nofund', '1'); $('#fund').hidden = true; return; }
-  if (r.ok) load(); else say($('#sendMsg'), r.data.message || 'Could not add test money.', 'err');
-};
+  if (r.ok) load(); else say($('#askMsg'), r.data.message || 'Could not add test money.', 'err');
+});
 
-/* ---- send money ---- */
-let attempt = null; // keeps one idempotency key per payment so retries never double-charge
+/* ---------- assistant ---------- */
+$('#askBtn').onclick = () => run($('#askBtn'), async () => {
+  const text = $('#ask').value.trim(), m = $('#askMsg'); if (!text) return;
+  const r = await api('/assistant/parse', { method: 'POST', body: { text } }); const p = r.data;
+  if (!r.ok) return say(m, p.message || 'Try again.', 'err');
+  if (p.intent === 'balance') return say(m, 'Your balance is ' + $('#bal').textContent + '.');
+  if (p.intent === 'spending_summary') {
+    const s = txs.filter((x) => x.amount_kobo < 0 && ['transfer', 'bill'].includes(x.kind)).reduce((a, x) => a - x.amount_kobo, 0);
+    return say(m, 'You spent ' + naira(s) + ' on transfers and bills in your recent activity.');
+  }
+  if (p.intent === 'transfer') {
+    if (!p.amountKobo) return say(m, 'How much do you want to send?');
+    $('#amt').value = p.amountKobo / 100; show('pay');
+    if (p.matches && p.matches.length) { $('#to').value = p.matches[0].account_number; say($('#sendMsg'), 'Ready to send ' + naira(p.amountKobo) + ' to ' + p.matches[0].name + '. Check the details, then tap Send.'); }
+    else say($('#sendMsg'), 'I have no saved payee called "' + p.recipient + '". Enter their account number, then tap Send.');
+    return;
+  }
+  if (p.intent === 'bill') { $('#svc').value = p.service; if (p.amountKobo) $('#bamt').value = p.amountKobo / 100; show('pay'); return say($('#billMsg'), 'Enter the number to pay, then tap Pay now.'); }
+  say(m, 'I can send money, buy airtime or data, show your balance and your spending. Try: send 5000 to Ada.');
+});
+
+/* ---------- send money and bills ---------- */
+let attempt = null, billKey = null; // one idempotency key per payment, so retries never double-charge
 $('#sendForm').addEventListener('input', (e) => { if (e.target.id !== 'spin') { attempt = null; $('#pinBox').hidden = true; } });
-$('#sendForm').onsubmit = async (e) => {
-  e.preventDefault();
-  const to = $('#to').value.trim(), amt = Math.round(parseFloat($('#amt').value) * 100), note = $('#note').value.trim(), pin = $('#spin').value.trim();
-  const m = $('#sendMsg');
+$('#billForm').addEventListener('input', () => (billKey = null));
+$('#sendForm').onsubmit = (e) => { e.preventDefault(); run($('#sendBtn'), async () => {
+  const to = $('#to').value.trim(), amt = toKobo($('#amt').value), note = $('#note').value.trim(), pin = $('#spin').value.trim(), m = $('#sendMsg');
   if (!/^\d{10}$/.test(to)) return say(m, 'Enter the 10-digit account number.', 'err');
   if (!(amt > 0)) return say(m, 'Enter an amount above ₦0.', 'err');
   if (!attempt) attempt = crypto.randomUUID();
-  $('#sendBtn').disabled = true; say(m, 'Sending...');
+  say(m, 'Sending...');
   const r = await api('/wallet/transfer', { method: 'POST', key: attempt, body: { to_account_number: to, amount_kobo: amt, narration: note || undefined, pin: pin || undefined } });
-  $('#sendBtn').disabled = false;
   const s = r.data.status;
-  if (s === 'completed' || s === 'duplicate') {
-    say(m, 'Sent ' + naira(amt) + ' to ' + to + '.', 'ok'); attempt = null; $('#sendForm').reset(); $('#pinBox').hidden = true; load();
-  } else if (s === 'step_up_required') {
-    $('#pinBox').hidden = false; $('#spin').focus(); say(m, 'For your safety, confirm this payment with your PIN, then tap Send again.', '', r.data.risk && r.data.risk.reasons);
-  } else if (s === 'blocked') {
-    attempt = null; say(m, 'We blocked this payment because it looks risky.', 'err', r.data.risk && r.data.risk.reasons);
-  } else {
-    if (r.data.error === 'BAD_PIN') { $('#spin').value = ''; }
-    say(m, r.data.message || 'Payment failed.', 'err');
-  }
-};
+  if (s === 'completed' || s === 'duplicate') { say(m, 'Sent ' + naira(amt) + ' to ' + to + '.', 'ok'); attempt = null; $('#sendForm').reset(); $('#pinBox').hidden = true; loadBal(); }
+  else if (s === 'step_up_required') { $('#pinBox').hidden = false; $('#spin').focus(); say(m, 'For your safety, confirm with your PIN, then tap Send again.', '', r.data.risk && r.data.risk.reasons); }
+  else if (s === 'blocked') { attempt = null; say(m, 'We blocked this payment because it looks risky.', 'err', r.data.risk && r.data.risk.reasons); }
+  else { if (r.data.error === 'BAD_PIN') $('#spin').value = ''; say(m, r.data.message || 'Payment failed.', 'err'); }
+}); };
+$('#billForm').onsubmit = (e) => { e.preventDefault(); run($('#billBtn'), async () => {
+  const m = $('#billMsg'), account = $('#bacct').value.trim(), amt = toKobo($('#bamt').value);
+  if (!account) return say(m, 'Enter the number to pay.', 'err');
+  if (!(amt > 0)) return say(m, 'Enter an amount above ₦0.', 'err');
+  if (!billKey) billKey = crypto.randomUUID();
+  say(m, 'Paying...');
+  const r = await api('/bills/pay', { method: 'POST', key: billKey, body: { service: $('#svc').value, account, amount_kobo: amt } });
+  if (r.ok) { say(m, 'Paid ' + naira(amt) + '.' + (r.data.token ? ' Token: ' + r.data.token : ''), 'ok'); billKey = null; $('#billForm').reset(); loadBal(); }
+  else say(m, r.data.message || 'Payment failed.', 'err');
+}); };
 
-/* ---- start ---- */
+/* ---------- savings ---------- */
+async function loadSave() {
+  const r = await api('/savings'); const box = $('#goals'); box.textContent = '';
+  if (!r.ok || !r.data.length) return box.append(h('p', { class: 'mut' }, 'No savings goals yet. Create one below.'));
+  r.data.forEach((g) => {
+    const pct = Math.min(100, (g.saved_kobo / g.target_kobo) * 100);
+    const inp = h('input', { inputmode: 'decimal', placeholder: 'Amount (₦)', 'aria-label': 'Amount for ' + g.name }), msg = h('div', { class: 'msg', hidden: '' });
+    const act = (dir) => (ev) => run(ev.target, async () => {
+      const a = toKobo(inp.value); if (!(a > 0)) return say(msg, 'Enter an amount.', 'err');
+      const x = await api('/savings/' + g.id + '/' + dir, { method: 'POST', body: { amount_kobo: a } });
+      if (x.ok) loadSave(); else say(msg, x.data.message || 'Failed.', 'err');
+    });
+    box.append(h('div', { class: 'card' }, h('div', { class: 'row' }, h('h3', {}, g.name), h('span', { class: 'chip' }, g.locked ? 'Locked until target' : 'Open')),
+      h('p', {}, naira(g.saved_kobo) + ' of ' + naira(g.target_kobo)), h('div', { class: 'bar' }, h('i', { style: 'width:' + pct + '%' })), inp,
+      h('div', { class: 'row2' }, h('button', { class: 'btn', onclick: act('deposit') }, 'Add'), h('button', { class: 'btn ghost', onclick: act('withdraw') }, 'Withdraw')), msg));
+  });
+}
+$('#goalForm').onsubmit = (e) => { e.preventDefault(); run($('#goalForm').querySelector('button'), async () => {
+  const m = $('#goalMsg'), name = $('#gname').value.trim(), t = toKobo($('#gtarget').value);
+  if (!name || !(t > 0)) return say(m, 'Enter a name and a target amount.', 'err');
+  const r = await api('/savings', { method: 'POST', body: { name, target_kobo: t } });
+  if (r.ok) { $('#goalForm').reset(); m.hidden = true; loadSave(); } else say(m, r.data.message || 'Could not create goal.', 'err');
+}); };
+
+/* ---------- cards ---------- */
+async function loadCards() {
+  const r = await api('/cards'); const box = $('#cardList'); box.textContent = '';
+  if (!r.ok || !r.data.length) return box.append(h('p', { class: 'mut' }, 'No cards yet.'));
+  r.data.forEach((c) => {
+    const frozen = c.status === 'frozen';
+    box.append(h('div', {}, h('div', { class: 'vcard' + (frozen ? ' off' : '') }, h('div', { class: 'row' }, h('b', {}, 'Payvue'), h('span', {}, frozen ? 'Frozen' : 'Active')), h('div', { class: 'no' }, '•••• •••• •••• ' + c.last4), h('span', {}, c.currency + ' virtual card')),
+      h('button', { class: 'btn ghost', onclick: (ev) => run(ev.target, async () => { await api('/cards/' + c.id + (frozen ? '/unfreeze' : '/freeze'), { method: 'POST' }); loadCards(); }) }, frozen ? 'Unfreeze card' : 'Freeze card')));
+  });
+}
+$('#newCard').onclick = () => run($('#newCard'), async () => { const r = await api('/cards', { method: 'POST' }); if (r.ok) { $('#cardMsg').hidden = true; loadCards(); } else say($('#cardMsg'), r.data.message || 'Could not create card.', 'err'); });
+
+/* ---------- loans ---------- */
+async function loadLoans() {
+  const r = await api('/loans/eligibility');
+  if (r.ok) { $('#limit').textContent = naira(r.data.limitKobo); $('#fee').textContent = Math.round(r.data.feeRate * 100) + '%'; }
+}
+$('#borrow').onclick = () => run($('#borrow'), async () => {
+  const m = $('#loanMsg'), a = toKobo($('#lamt').value); if (!(a > 0)) return say(m, 'Enter an amount above ₦0.', 'err');
+  const r = await api('/loans', { method: 'POST', body: { amount_kobo: a } });
+  if (r.ok) { say(m, 'Loan of ' + naira(a) + ' added to your wallet. Repay within 30 days.', 'ok'); $('#lamt').value = ''; loadLoans(); loadBal(); } else say(m, r.data.message || 'Could not get loan.', 'err');
+});
+$('#repay').onclick = () => run($('#repay'), async () => {
+  const m = $('#loanMsg'), r = await api('/loans/repay', { method: 'POST' });
+  if (r.ok) { say(m, 'Loan repaid: ' + naira(r.data.repaidKobo) + '.', 'ok'); loadLoans(); loadBal(); } else say(m, r.data.message || 'Could not repay.', 'err');
+});
+
+/* ---------- start ---------- */
 (async function init() {
   setMode('up');
-  if (store.get('pv_tok')) showApp();
+  if (store.get('pv_tok')) enter();
   $('#banner').hidden = false;
   try { await fetch(API + '/health'); } catch {}
   $('#banner').hidden = true;
