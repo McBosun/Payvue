@@ -14,7 +14,39 @@ for (const k of ['DATABASE_URL', 'JWT_SECRET', 'WEBHOOK_SECRET']) if (!process.e
 
 const app = express();
 app.disable('x-powered-by');
-app.use(helmet());
+app.set('trust proxy', 1); // Render sits behind a proxy
+
+// Allow the Payvue web page (GitHub Pages) to call this API from the browser.
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || 'https://mcbosun.github.io';
+app.use((req, res, next) => {
+  if (req.get('origin') === ALLOWED_ORIGIN) {
+    res.set({
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      Vary: 'Origin',
+      'Access-Control-Allow-Headers': 'Authorization, Content-Type, Idempotency-Key, X-Device-Id',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Max-Age': '600',
+    });
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+
+// Allow the Payvue web page (GitHub Pages) to call this API from the browser.
+const ORIGIN = process.env.CORS_ORIGIN || 'https://mcbosun.github.io';
+app.use((req, res, next) => {
+  if (req.headers.origin === ORIGIN) {
+    res.set({
+      'Access-Control-Allow-Origin': ORIGIN,
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, Idempotency-Key, X-Device-Id',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      Vary: 'Origin',
+    });
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
 app.use('/webhooks', express.raw({ type: '*/*', limit: '100kb' }), webhookRoutes); // raw body for signature checks
 app.use(express.json({ limit: '100kb' }));
 
@@ -35,3 +67,4 @@ app.use((err, _req, res, _next) => {
 });
 
 app.listen(process.env.PORT || 3000, () => console.log('Payvue API listening'));
+
