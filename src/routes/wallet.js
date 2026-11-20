@@ -10,7 +10,7 @@ walletRoutes.use(requireAuth);
 walletRoutes.get('/', async (req, res, next) => {
   try {
     const w = await walletOf(pool, req.userId);
-    res.json({ accountNumber: w.account_number, balanceKobo: Number(w.balance_kobo) });
+    res.json({ accountNumber: w.account_number, name: w.name, balanceKobo: Number(w.balance_kobo) });
   } catch (e) { next(e); }
 });
 
@@ -46,3 +46,4 @@ walletRoutes.post('/dev-fund', async (req, res, next) => {
     res.status(201).json({ ok: true });
   } catch (e) { next(e); }
 });
+
